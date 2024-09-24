@@ -1,0 +1,8 @@
+service: "service:VLLM"
+labels:
+  platforms: linux
+include:
+- "*.py"
+- "*.yaml"
+python:
+  requirements_txt: "./requirements.txt"
