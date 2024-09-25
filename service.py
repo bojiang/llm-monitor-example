@@ -8,19 +8,9 @@ from annotated_types import Ge, Le
 from bentoml.models import HuggingFaceModel
 from typing_extensions import Annotated
 
+
 MODEL_ID = "Qwen/Qwen2-7B-Instruct-AWQ"
-
 VLLM_ENGINE_CONFIG = {"max_model_len": 2048, "quantization": "awq"}
-
-SERVICE_CONFIG = {
-    "name": "qwen2",
-    "traffic": {"timeout": 300},
-    "resources": {"gpu": 1, "gpu_type": "nvidia-l4"},
-    "monitoring": {
-        "enabled": True,
-        "type": "default",
-    }
-}
 
 
 class Message(pydantic.BaseModel):
@@ -28,7 +18,15 @@ class Message(pydantic.BaseModel):
     content: str
 
 
-@bentoml.service(**SERVICE_CONFIG)
+@bentoml.service(
+    name="qwen2",
+    traffic={"timeout": 300},
+    resources={"gpu": 1, "gpu_type": "nvidia-l4"},
+    monitoring={
+        "enabled": True,
+        "type": "default",
+    }
+)
 class VLLM:
     llm = HuggingFaceModel(MODEL_ID)
 
